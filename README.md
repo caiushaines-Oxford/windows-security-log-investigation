@@ -1,74 +1,76 @@
-
-# Windows Security Log Investigation — SOC Analyst Home Lab
+# Windows Failed Logon Analysis — SOC Analyst Home Lab
 
 ## Project Overview
 
-This project documents a practical security investigation conducted in a Windows 11 Pro virtual machine using Oracle VirtualBox.
+This project demonstrates a practical Windows security investigation conducted in a Windows 11 Pro virtual machine using Oracle VirtualBox.
 
-The objective was to investigate Windows authentication activity, identify failed and successful login attempts, and understand how a Security Operations Centre (SOC) Analyst can correlate Windows Security events.
+The objective was to generate and analyse failed authentication attempts using Windows Event Viewer, demonstrating foundational Security Operations Centre (SOC) monitoring and investigation techniques.
 
 ## Lab Environment
 
-- **Operating System:** Windows 11 Pro
-- **Virtualisation:** Oracle VirtualBox
-- **Monitoring Tool:** Windows Event Viewer
-- **Audit Configuration:** Success and Failure auditing enabled for Logon events
-- **Test Account:** SOC-TestUser
-- **Investigation Type:** Windows Authentication Event Analysis
+| Component | Technology |
+|---|---|
+| Operating System | Windows 11 Pro |
+| Virtualisation | Oracle VirtualBox |
+| Log Analysis | Windows Event Viewer |
+| Audit Policy | Logon Success and Failure enabled |
+| Test Account | SOC-TestUser |
+| Security Event | Windows Event ID 4625 |
 
 ## Investigation Scenario
 
-A controlled series of incorrect password attempts was performed against a dedicated Windows test account, followed by a successful authentication.
+A dedicated Windows test account was created to simulate repeated unsuccessful authentication attempts.
 
-The investigation focused on identifying and interpreting:
+Incorrect passwords were deliberately submitted using the Windows `runas` command.
 
-| Event ID | Description |
-|---|---|
-| 4625 | Failed account logon |
-| 4624 | Successful account logon |
+The resulting Windows Security events were examined to understand how failed authentication activity can be detected and investigated.
 
-This sequence was used to simulate an authentication pattern that could warrant investigation in a production environment.
+## Investigation Methodology
 
-## Methodology
-
-1. Configured Windows security auditing.
+1. Configured Windows Advanced Audit Policy to record authentication events.
 2. Created a dedicated standard-user test account.
-3. Generated controlled authentication failures using the Windows `runas` command.
-4. Successfully authenticated using the correct credentials.
-5. Filtered Windows Security logs in Event Viewer.
-6. Identified Event IDs 4625 and 4624 associated with the test account.
-7. Examined authentication activity and prepared an investigation report.
+3. Generated controlled failed authentication attempts using incorrect credentials.
+4. Opened Windows Event Viewer and filtered the Security log for Event ID 4625.
+5. Identified failed authentication events.
+6. Examined the affected account and available event metadata.
+7. Assessed the security significance of repeated failed logons.
+
+## Security Event Analysis
+
+### Event ID 4625 — An Account Failed to Log On
+
+Event ID 4625 is generated when Windows records a failed logon attempt.
+
+Important fields include:
+
+- **Account Name:** Identifies the account involved.
+- **Logon Type:** Indicates the authentication method.
+- **Failure Reason:** Explains why authentication failed.
+- **Status and Sub Status:** Provide technical details about the failure.
+- **Time Created:** Establishes when the attempt occurred.
+- **Source Network Address:** Identifies the network source when available.
 
 ## Findings
 
-- Failed authentication activity was successfully recorded as Event ID 4625.
-- A subsequent successful authentication was recorded as Event ID 4624.
-- Both event types were identified for the dedicated test account.
-- The activity was part of an authorised lab simulation, not a confirmed malicious attack.
+Windows Security Event ID 4625 was successfully generated and identified within the virtual machine.
 
-Exact timestamps, event counts and additional metadata will be documented in the incident report after verification.
+The exercise demonstrated how Windows Security auditing can provide evidence of unsuccessful authentication attempts.
 
-## Security Considerations
+Repeated failures can be associated with password-guessing activity, although they are not sufficient by themselves to establish malicious intent.
 
-In a real SOC environment, repeated authentication failures followed by a successful login may justify further investigation.
-
-Analysts should correlate account names, timestamps, logon types, source information and relevant environmental context before drawing conclusions.
-
-## Skills Demonstrated
-
-- Windows Security Event Log Analysis
-- Authentication Monitoring
-- Windows Audit Policy Configuration
-- Security Event Correlation
-- Basic Threat Investigation
-- Incident Reporting
-
-## Investigation Evidence
-
-Supporting screenshots and the completed incident report will be added after verification and redaction.
+In this investigation, the activity was generated intentionally in an authorised lab environment.
 
 ## Conclusion
 
-This project demonstrates foundational SOC Analyst investigation skills through a controlled Windows authentication exercise.
+The investigation successfully demonstrated foundational Windows authentication monitoring and security event analysis.
 
-**Final classification:** Authorised lab activity — no malicious behaviour established.
+**Final Classification:** Benign — Authorised Security Testing.
+
+## Skills Demonstrated
+
+- Windows Event Log Analysis
+- Security Auditing
+- Failed Authentication Investigation
+- Security Event Filtering
+- Basic Threat Detection
+- SOC Incident Documentation
